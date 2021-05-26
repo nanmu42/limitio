@@ -13,7 +13,7 @@ go get github.com/nanmu42/limitio
 
 ## Rationale and Usage
 
-There are times when a limited reader or writer come in handy.
+There are times when a limited reader or writer comes in handy.
 
 1. wrap upstream so that reading is metered and limited:
 
@@ -21,10 +21,12 @@ There are times when a limited reader or writer come in handy.
 // request is an incoming http.Request
 request.Body = limitio.NewReadCloser(c.Request.Body, maxRequestBodySize, false)
 
-// deal with the body now. It's maximum size is assured.
+// deal with the body now with easy mind. It's maximum size is assured.
 ```
 
-Yes, `io.LimitReader` works the same way, but is throws `EOF` on exceeding limit, which is confusing.
+Yes, `io.LimitReader` works the same way, but throws `EOF` on exceeding limit, which is confusing.
+
+LimitIO provides error that can be identified.
 
 ```go
 decoder := json.NewDecoder(request.Body)
