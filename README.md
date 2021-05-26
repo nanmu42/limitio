@@ -11,7 +11,7 @@
 go get github.com/nanmu42/limitio
 ```
 
-# Rationale and Usage
+## Rationale and Usage
 
 There are times when a limited reader or writer come in handy.
 
@@ -63,13 +63,13 @@ request.Body = &readCloser{
 
 LimitIO provides Reader, Writer and their Closer versions, for details, see [docs](https://pkg.go.dev/github.com/nanmu42/limitio).
 
-# Status: Beta
+## Status: Beta
 
 LimitIO is battling under production environment.
 
 APIs are subjected to change in backward compatible way.
 
-# License
+## License
 
 MIT License
 Copyright (c) 2021 LI Zhennan
