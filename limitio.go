@@ -1,3 +1,4 @@
+// Package limitio brings `io.Reader` and `io.Writer` with limit.
 package limitio
 
 import (
@@ -34,6 +35,8 @@ var _ io.Reader = (*Reader)(nil)
 
 // Reader works like io.LimitedReader but may be tuned to report
 // oversize read as a distinguishable error other than io.EOF.
+//
+// Use NewReader() to create Reader.
 type Reader struct {
 	r                 io.Reader
 	left              int
@@ -62,6 +65,8 @@ var _ io.ReadCloser = (*ReadCloser)(nil)
 // ReadCloser works like io.LimitedReader( but with a Close() method)
 // but may be tuned to report oversize read as
 // a distinguishable error other than io.EOF.
+//
+// User NewReadCloser() to create ReadCloser.
 type ReadCloser struct {
 	*Reader
 	io.Closer

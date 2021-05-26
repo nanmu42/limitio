@@ -7,11 +7,67 @@
 
 `io.Reader` and `io.Writer` with limit.
 
+```bash
+go get github.com/nanmu42/limitio
+```
+
+# Rationale and Usage
+
+There are times when a limited reader or writer come in handy.
+
+1. wrap upstream so that reading is metered and limited:
+
+```go
+// request is an incoming http.Request
+request.Body = limitio.NewReadCloser(c.Request.Body, maxRequestBodySize, false)
+
+// deal with the body now. It's maximum size is assured.
+```
+
+Yes, `io.LimitReader` works the same way, but is throws `EOF` on exceeding limit, which is confusing.
+
+```go
+decoder := json.NewDecoder(request.Body)
+err := decoder.Decode(&myStruct)
+if err != nil {
+    if errors.Is(err, limitio.ErrThresholdExceeded) {
+        // oops, we reached the limit
+    }
+
+    err = fmt.Errorf("other error happened: %w", err)
+    return
+}
+```
+
+2. wrap downstream so that writing is metered and limited(or instead, just pretending writing):
+
+```go
+// request is an incoming http.Request.
+// Say, we want to record its body somewhere in the middleware,
+// but feeling uneasy since its body might be HUGE, which may
+// result in OOM and a successful DDOS...
+
+var reqBuf bytes.buffer
+
+// a limited writer comes to rescue!
+// `true` means after reaching `RequestBodyMaxLength`,
+// `limitedReqBuf` will start pretending writing so that
+// io.TeeReader continues working while reqBuf stays unmodified.
+limitedReqBuf := limitio.NewWriter(&reqBuf, RequestBodyMaxLength, true)
+
+request.Body = &readCloser{
+    Reader: io.TeeReader(request.Body, limitedReqBuf), 
+    Closer: c.Request.Body,
+}
+```
+
+LimitIO provides Reader, Writer and their Closer versions, for details, see [docs](https://pkg.go.dev/github.com/nanmu42/limitio).
+
 # Status: Beta
 
-LimitIO is being tested under production environment.
+LimitIO is battling under production environment.
 
-APIs are still subjected to change in backward compatible way mostly.
+APIs are subjected to change in backward compatible way.
 
 # License
 
