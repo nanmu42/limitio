@@ -65,13 +65,14 @@ request.Body = &readCloser{
 
 LimitIO provides Reader, Writer and their Closer versions, for details, see [docs](https://pkg.go.dev/github.com/nanmu42/limitio).
 
-## Status: Beta
+## Status: Stable
 
-LimitIO is battling under production environment.
+LimitIO is well battle tested under production environment.
 
-APIs are subjected to change in backward compatible way.
+APIs are subjected to change in backward compatible way during 1.x releases.
 
 ## License
 
 MIT License
+
 Copyright (c) 2021 LI Zhennan
